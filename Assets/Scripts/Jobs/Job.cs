@@ -21,14 +21,17 @@ public class Job
         Location = location;
         TimeToComplete = timeToComplete;
 
-        if(jobCompletion != null)
+        if (jobCompletion == null)
+            OnJobCompleted += () => { Owner.CurrentJob = null; };
+        else
             OnJobCompleted += jobCompletion;
     }
 
-    public Vector2 Location { get; private set; }
-    public float TimeToComplete { get; private set; }
+    public Vector2 Location { get; protected set; }
+    public float TimeToComplete { get; protected set; }
+    public Minion Owner { get; set; }
 
-    public void DoWork()
+    public virtual void DoWork()
     {
         TimeToComplete -= Time.deltaTime;
 

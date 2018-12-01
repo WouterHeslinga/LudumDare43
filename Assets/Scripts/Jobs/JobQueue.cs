@@ -17,13 +17,14 @@ public class JobQueue : MonoBehaviour
         jobs.Add(job);
     }
 
-    public Job DeQueue()
+    public Job DeQueue(Minion owner)
     {
         if (!JobsAvailable)
             return null;
 
         Job newJob = jobs[0];
         jobs.RemoveAt(0);
+        newJob.Owner = owner;
         return newJob;
     }
 }

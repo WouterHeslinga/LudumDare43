@@ -30,12 +30,18 @@ public class MouseController : MonoBehaviour
                 var entity = hit.transform.GetComponent<IHasInfoPanel>();
                 infoPanelManager.SelectMinion(entity);
             }
+            //Check if we clicked a collectable
+            else if(hit.transform?.GetComponent<ICollectable>() != null)
+            {
+                var collectable = hit.transform.GetComponent<ICollectable>();
+                collectable.Collect();
+            }
             //We didnt hit a minion
             else
             {
                 infoPanelManager.DeselectMinion();
 
-                jobQueue.Enqueue(new Job(Camera.main.ScreenToWorldPoint(Input.mousePosition), 1, () => Debug.Log("Job complete")));
+                jobQueue.Enqueue(new Job(Camera.main.ScreenToWorldPoint(Input.mousePosition), 1));
             }
         }
     }

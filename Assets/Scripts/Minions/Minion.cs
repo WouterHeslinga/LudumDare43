@@ -10,7 +10,8 @@ public class Minion : MonoBehaviour, IHasInfoPanel
     public StateMachine stateMachine { get; private set; }
     public MinionStats stats { get; private set; }
 
-    public Job CurrentJob { get; private set; }
+    public Job CurrentJob { get; set; }
+    public ICollectable Collectable { get; set; }
 
     //TODO: Find a way to fix this so this class only has 1 Stats class but can use the MinionStats here while also implementing the IHasInfoPanel interface
     public IStats Stats => stats;
@@ -34,8 +35,10 @@ public class Minion : MonoBehaviour, IHasInfoPanel
 
         if (jobQueue.JobsAvailable)
         {
-            CurrentJob = jobQueue.DeQueue();
-            CurrentJob.OnJobCompleted += () => CurrentJob = null;
+            CurrentJob = jobQueue.DeQueue(this);
+
+            if(CurrentJob.OnJobCompleted.GetInvocationList().Length == 0)
+                CurrentJob.OnJobCompleted += () => CurrentJob = null;
 
             stateMachine.ChangeState(new WorkingState());
         }

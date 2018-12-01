@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6226077060290440481}
   - component: {fileID: 6226077060290440495}
   - component: {fileID: 6226077060290440494}
+  - component: {fileID: 630359686}
+  - component: {fileID: 630359687}
   m_Layer: 0
   m_Name: GameScripts
   m_TagString: Untagged
@@ -72,3 +74,27 @@ MonoBehaviour:
   canvas: {fileID: 0}
   minionInfoPanelPrefab: {fileID: 8852597761897813073, guid: 979ee61e7f6825848b4e4a878f78fb77,
     type: 3}
+--- !u!114 &630359686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226077060290440482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c19ddbae26fb9449b28eeed7edee4ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &630359687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226077060290440482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed5bd31784bf114ca36ad1db74c2cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

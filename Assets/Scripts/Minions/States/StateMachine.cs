@@ -9,6 +9,7 @@ public class StateMachine
 {
     private Minion owner;
     private IMinionState currentState;
+    public string Status => currentState.Status;
 
     public StateMachine(Minion owner, IMinionState startingState)
     {

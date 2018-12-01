@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinionStats
+public class MinionStats : IStats
 {
-    public MinionStats()
+    public MinionStats(Minion owner)
     {
-        Gender = (Gender)UnityEngine.Random.Range(0, Enum.GetNames(typeof(Gender)).Length +1);
+        this.owner = owner;
+        Gender = (Gender)UnityEngine.Random.Range(0, Enum.GetNames(typeof(Gender)).Length);
         Age = UnityEngine.Random.Range(18,40);
         Health = 100;
         Hunger = 100;
@@ -15,9 +16,9 @@ public class MinionStats
         MaxSpeed = 1f;
     }
 
-    public delegate void StatChanged(MinionStats stats);
-    public StatChanged OnStatChanged;
+    public StatChanged OnStatChanged { get; set; }
 
+    private Minion owner;
     public Gender Gender { get; private set; }
     public int Age { get; private set; }
     private float ageTimer = 0;
@@ -25,13 +26,14 @@ public class MinionStats
     public int Hunger { get; set; }
     public int Sanity { get; private set; }
     public float MaxSpeed { get; private set; }
+    public string Status => owner.stateMachine.Status;
 
     public bool IsHungry => Hunger <= 60;
     public bool IsSane => Sanity > 50;
     public bool CanReproduce => Age >= 20;
     public float Speed => IsHungry ? MaxSpeed / 2 : MaxSpeed;
 
-    public void Update()
+    public void UpdateStats()
     {
         Hunger--;
         Sanity--;

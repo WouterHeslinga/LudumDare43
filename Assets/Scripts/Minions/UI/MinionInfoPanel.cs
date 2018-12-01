@@ -6,22 +6,28 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MinionInfoPanel : MonoBehaviour
+public class MinionInfoPanel : MonoBehaviour, IInfoPanel
 {
     [SerializeField] private Text gender;
     [SerializeField] private Text age;
+    [SerializeField] private Text status;
     [SerializeField] private Slider health;
     [SerializeField] private Slider hunger;
     [SerializeField] private Slider sanity;
 
-    public void UpdateInfo(MinionStats stats)
-    {
-        gender.text = $"Gender: {stats.Gender}";
-        age.text = $"Age: {stats.Age}";
+    public GameObject GameObject => gameObject;
+    public Transform Transform => transform;
 
-        health.value = stats.Health;
-        hunger.value = stats.Hunger;
-        sanity.value = stats.Sanity;
+    public void UpdateInfo(IStats stats)
+    {
+        MinionStats minionStats = (MinionStats)stats;
+        gender.text = $"Gender: {minionStats.Gender}";
+        age.text = $"Age: {minionStats.Age}";
+        status.text = $"Status: {minionStats.Status}";
+
+        health.value = minionStats.Health;
+        hunger.value = minionStats.Hunger;
+        sanity.value = minionStats.Sanity;
     }
 }
 

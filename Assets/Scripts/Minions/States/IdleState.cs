@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class IdleState : IMinionState
 {
     public Minion Owner { get; private set; }
+    public string Status => "Just running around";
+
+    private Vector2 destination = Vector2.zero;
 
     public void Enter(Minion owner)
     {
@@ -16,10 +14,16 @@ public class IdleState : IMinionState
     
     public void Update()
     {
-        if (Owner.ReachedDestination)
+        if (destination == Vector2.zero)
+            destination = (Vector2)Owner.transform.position + Random.insideUnitCircle * 5;
+
+        //Are we in range to do work?
+        if (Vector2.Distance(destination, Owner.transform.position) > 0.5)
+            Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, destination, Owner.stats.Speed * Time.deltaTime);
+        else
         {
-            if(Owner.NewJobAvailable() == false)
-                Owner.SetDestination((Vector2)Owner.transform.position + UnityEngine.Random.insideUnitCircle * 2);
+            destination = Vector2.zero;
+            Owner.CheckForNewJob();
         }
     }
 

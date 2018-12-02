@@ -26,7 +26,7 @@ public class ResourceFactory : MonoBehaviour
         GameObject go = new GameObject();
         go.AddComponent<SpriteRenderer>().sprite = resourceSprites[type];
         go.AddComponent<Resource>().Initialize(type);
-        go.AddComponent<BoxCollider2D>();
+        go.AddComponent<PolygonCollider2D>();
         go.name = $"{type}";
 
         go.transform.position = position;

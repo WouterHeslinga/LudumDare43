@@ -11,9 +11,13 @@ public class MinionManager : MonoBehaviour
 
     public static MinionManager Instance;
 
+    public delegate void PopulationChanged();
+    public PopulationChanged OnPopulationChanged;
+
     private List<Minion> allMinions;
 
     public int Population => allMinions.Count;
+    public int MaxPopulation { get; private set; } = 10;
 
     private void Awake()
     {
@@ -34,12 +38,14 @@ public class MinionManager : MonoBehaviour
 
     public void AddMinion(Minion minion)
     {
-        this.allMinions.Add(minion);
+        allMinions.Add(minion);
+        OnPopulationChanged?.Invoke();
     }
 
     public void RemoveMinion(Minion minion)
     {
         allMinions.Remove(minion);
+        OnPopulationChanged?.Invoke();
     }
 
     public List<Minion> FindAvailabePartners(Minion minion)
@@ -63,9 +69,14 @@ public class MinionManager : MonoBehaviour
         var minion = Instantiate(minionPrefab).GetComponent<Minion>();
         minion.transform.position = position;
         var stats = new MinionStats(minion, age);
-
-        allMinions.Add(minion);
-
         minion.Initialize(stats);
+
+        AddMinion(minion);
+    }
+
+    public void IncreaseMaxPopulation(int amount)
+    {
+        MaxPopulation += amount;
+        OnPopulationChanged?.Invoke();
     }
 }

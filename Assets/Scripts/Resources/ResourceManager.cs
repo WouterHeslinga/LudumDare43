@@ -12,7 +12,7 @@ public class ResourceManager : MonoBehaviour
 
     public Dictionary<ResourceType, int> Resources { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         Resources = new Dictionary<ResourceType, int>()
         {

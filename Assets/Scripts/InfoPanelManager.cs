@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InfoPanelManager : MonoBehaviour
 {
-    [SerializeField] private Transform canvas;
+    [SerializeField] private Transform infoPanelParent;
     [SerializeField] private GameObject minionInfoPanelPrefab;
 
     private Dictionary<Type, IInfoPanel> infoPanelDictionary;
@@ -20,12 +20,6 @@ public class InfoPanelManager : MonoBehaviour
         };
     }
 
-    private void Update()
-    {
-        if(selectedEntity != null)
-            currentInfoPanel.Transform.position = Camera.main.WorldToScreenPoint(selectedEntity.Transform.position + new Vector3(0, 2));
-    }
-
     /// <summary>
     /// Select the give minion and show the info panel for that minion
     /// </summary>
@@ -39,7 +33,7 @@ public class InfoPanelManager : MonoBehaviour
         Destroy(currentInfoPanel?.GameObject);
 
         //Create new info panel
-        currentInfoPanel = Instantiate(prefabDictionary[entity.GetType()], canvas).GetComponent<IInfoPanel>();
+        currentInfoPanel = Instantiate(prefabDictionary[entity.GetType()], infoPanelParent).GetComponent<IInfoPanel>();
 
         //Set new callback
         selectedEntity = entity;
@@ -47,7 +41,6 @@ public class InfoPanelManager : MonoBehaviour
         currentInfoPanel.UpdateInfo(selectedEntity.Stats);
 
         //Set position and show
-        currentInfoPanel.Transform.position = Camera.main.WorldToScreenPoint(selectedEntity.Transform.position + new Vector3(0, 2));
         currentInfoPanel.GameObject.SetActive(true);
     }
 

@@ -3,6 +3,7 @@
 public class CollectJob : Job
 {
     private ICollectable collectable;
+    public override string Description => "Collecting";
 
     public CollectJob(ICollectable collectable, Vector2 location) : base(location, 1, null)
     {
@@ -17,7 +18,8 @@ public class CollectJob : Job
     {
         var newJob = new DeliverJob(collectable, Vector2.zero)
         {
-            Owner = Owner
+            Owner = Owner,
+            JobQueue = JobQueue
         };
 
         Owner.CurrentJob = newJob;

@@ -35,8 +35,9 @@ public class Minion : MonoBehaviour, IHasInfoPanel
 
         if (jobQueue.JobsAvailable)
         {
-            CurrentJob = jobQueue.DeQueue(this);
+            CurrentJob = jobQueue.Dequeue(this);
 
+            //When the job doesnt have any oncompletion methods we can assume we dont get a follow up job, so we can set our job to null.
             if(CurrentJob.OnJobCompleted.GetInvocationList().Length == 0)
                 CurrentJob.OnJobCompleted += () => CurrentJob = null;
 
@@ -49,5 +50,15 @@ public class Minion : MonoBehaviour, IHasInfoPanel
     private void UpdateStats()
     {
         stats.UpdateStats();
+    }
+
+    public void Kill()
+    {
+        ResourceFactory.CreateResource(1, 3, ResourceType.Bones, transform.position);
+        ResourceFactory.CreateResource(1, 3, ResourceType.Meat, transform.position);
+
+        CurrentJob?.CancelJob();
+
+        Destroy(gameObject);
     }
 }

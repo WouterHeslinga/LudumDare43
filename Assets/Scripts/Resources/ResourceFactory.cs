@@ -16,16 +16,11 @@ public class ResourceFactory : MonoBehaviour
         };
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-            CreateResource(ResourceType.Bones, Vector2.zero);
-        if (Input.GetKeyDown(KeyCode.S))
-            CreateResource(ResourceType.Meat, Vector2.zero);
-        if (Input.GetKeyDown(KeyCode.D))
-            CreateResource(ResourceType.Food, Vector2.zero);
-    }
-
+    /// <summary>
+    /// Create a resource object at the given position
+    /// </summary>
+    /// <param name="type">The type of resource</param>
+    /// <param name="position">The position of the resource in world space</param>
     public static void CreateResource(ResourceType type, Vector2 position)
     {
         GameObject go = new GameObject();
@@ -35,5 +30,21 @@ public class ResourceFactory : MonoBehaviour
         go.name = $"{type}";
 
         go.transform.position = position;
+    }
+
+    /// <summary>
+    /// Create multiple resources at the given position
+    /// </summary>
+    /// <param name="minAmount">Min amount of resources to spawn</param>
+    /// <param name="maxAmount">Max amount of resources to spawn</param>
+    /// <param name="type">The type of resource</param>
+    /// <param name="position">The position of the resource in world space</param>
+    public static void CreateResource(int minAmount, int maxAmount, ResourceType type, Vector2 position)
+    {
+        for (int i = 0; i < Random.Range(minAmount, maxAmount + 1); i++)
+        {
+            var randomPos = position + Random.insideUnitCircle;
+            CreateResource(type, randomPos);
+        }
     }
 }

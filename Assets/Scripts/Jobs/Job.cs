@@ -30,6 +30,8 @@ public class Job
     public Vector2 Location { get; protected set; }
     public float TimeToComplete { get; protected set; }
     public Minion Owner { get; set; }
+    public JobQueue JobQueue { get; set; }
+    public virtual string Description => "Work Work";
 
     public virtual void DoWork()
     {
@@ -37,6 +39,12 @@ public class Job
 
         if (TimeToComplete <= 0)
             OnJobCompleted?.Invoke();
+    }
+
+    public virtual void CancelJob()
+    {
+        JobQueue.Enqueue(this);
+        Owner.CurrentJob = null;
     }
 }
 

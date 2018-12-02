@@ -12,6 +12,7 @@ public class Minion : MonoBehaviour, IHasInfoPanel
 
     public Job CurrentJob { get; set; }
     public ICollectable Collectable { get; set; }
+    public Animator Animator { get; private set; }
 
     //TODO: Find a way to fix this so this class only has 1 Stats class but can use the MinionStats here while also implementing the IHasInfoPanel interface
     public IStats Stats => stats;
@@ -20,6 +21,7 @@ public class Minion : MonoBehaviour, IHasInfoPanel
     {
         stats = new MinionStats(this);
         stateMachine = new StateMachine(this, new IdleState());
+        Animator = GetComponent<Animator>();
 
         InvokeRepeating(nameof(UpdateStats), 1, 1);
     }

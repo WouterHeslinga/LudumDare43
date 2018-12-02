@@ -33,14 +33,18 @@ public class WorkingState : IMinionState
         else
             Owner.CheckForNewJob();
 
-        if(Owner.Collectable != null)
+        if (Owner.Collectable != null)
         {
+            Owner.Animator.SetBool("HasCollectable", true);
             Owner.Collectable.Transform.position = Owner.transform.position + Owner.transform.up;
         }
+        else
+            Owner.Animator.SetBool("HasCollectable", false);
     }
 
     private void MoveTowardsDestination()
     {
+        Owner.Animator.SetBool("IsMoving", true);
         LookAtDestination();
         Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, Owner.CurrentJob.Location, Owner.stats.Speed * Time.deltaTime);
     }

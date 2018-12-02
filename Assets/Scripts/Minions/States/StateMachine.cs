@@ -9,7 +9,7 @@ public class StateMachine
 {
     private Minion owner;
     private IMinionState currentState;
-    public string Status => currentState.Status;
+    public MinionStatus Status => currentState.Status;
 
     public StateMachine(Minion owner, IMinionState startingState)
     {
@@ -22,6 +22,10 @@ public class StateMachine
         currentState?.Exit();
         currentState = newState;
         currentState.Enter(owner);
+
+        //If we get a new state given to us we should drop what we are doing and enter the new state
+        if (owner.CurrentJob != null && newState.Status == MinionStatus.Reproducing)
+            owner.CurrentJob.CancelJob();
     }
 
     public void UpdateCurrentState()

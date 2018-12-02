@@ -17,9 +17,9 @@ public class Minion : MonoBehaviour, IHasInfoPanel
     //TODO: Find a way to fix this so this class only has 1 Stats class but can use the MinionStats here while also implementing the IHasInfoPanel interface
     public IStats Stats => stats;
 
-    private void Start()
+    public void Initialize(MinionStats stats)
     {
-        stats = new MinionStats(this);
+        this.stats = stats;
         stateMachine = new StateMachine(this, new IdleState());
         Animator = GetComponent<Animator>();
 
@@ -33,6 +33,17 @@ public class Minion : MonoBehaviour, IHasInfoPanel
 
     public void CheckForNewJob()
     {
+        if (!stats.CanWork)
+            stateMachine.ChangeState(new IdleState());
+
+        //Check if our stats need work.
+        if(stats.GetNeeds() != null)
+        {
+            var newState = stats.GetNeeds();
+            stateMachine.ChangeState(newState);
+            return;
+        }
+
         var jobQueue = FindObjectOfType<JobQueue>();
 
         if (jobQueue.JobsAvailable)

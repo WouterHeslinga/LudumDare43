@@ -3,7 +3,7 @@
 public class IdleState : IMinionState
 {
     public Minion Owner { get; private set; }
-    public string Status => "Just running around";
+    public MinionStatus Status => MinionStatus.Idle;
 
     private Vector2 destination = Vector2.zero;
 

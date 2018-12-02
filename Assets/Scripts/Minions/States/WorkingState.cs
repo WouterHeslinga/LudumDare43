@@ -8,7 +8,7 @@ using UnityEngine;
 public class WorkingState : IMinionState
 {
     public Minion Owner { get; private set; }
-    public string Status => Owner.CurrentJob.Description;
+    public MinionStatus Status => MinionStatus.Working;
 
     public void Enter(Minion owner)
     {

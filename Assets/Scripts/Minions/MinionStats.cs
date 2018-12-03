@@ -13,8 +13,8 @@ public class MinionStats : IStats
         Health = 100;
         Hunger = 100;
         Sanity = 100;
-        MaxSpeed = 1f;
-        ReproduceTimer = UnityEngine.Random.Range(30, 60);
+        MaxSpeed = 3;
+        ReproduceTimer = UnityEngine.Random.Range(15, 30);
     }
 
     public StatChanged OnStatChanged { get; set; }
@@ -28,12 +28,12 @@ public class MinionStats : IStats
     public float MaxSpeed { get; private set; }
     public string Status => owner.stateMachine.Status.ToString();
 
-    public bool IsHungry => Hunger <= 60;
-    public bool IsSane => Sanity > 50;
-    public bool CanReproduce => Age >= 20 && ReproduceTimer <= 0;
+    public bool IsHungry => Hunger <= 40;
+    public bool IsSane => Sanity > 40;
+    public bool CanReproduce => Age >= 18 && ReproduceTimer <= 0;
     public float Speed => MaxSpeed;
 
-    private float ageTimer = 15;
+    private float ageTimer = 1;
     public float ReproduceTimer { get; set; }
     public bool CanWork => Age >= 12 && !IsHungry;
 
@@ -48,7 +48,16 @@ public class MinionStats : IStats
         if (ageTimer <= 0)
         {
             Age++;
-            ageTimer = 30;
+            ageTimer = 1;
+
+            if(Age > 75)
+            {
+                var diff = Age - 75;
+                var percentage = 4 * diff;
+
+                if (UnityEngine.Random.Range(0, 100) < percentage)
+                    owner.Kill();
+            }
         }
 
         OnStatChanged?.Invoke(this);
@@ -56,7 +65,7 @@ public class MinionStats : IStats
 
     public IMinionState GetNeeds()
     {
-        if (CanReproduce && !IsHungry && IsSane)
+        if (CanReproduce && !IsHungry && IsSane && MinionManager.Instance.HaveMinionSpace)
             return new ReproductionState();
 
         return null;

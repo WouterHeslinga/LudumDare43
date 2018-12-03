@@ -26,7 +26,7 @@ public class ReproductionState : IMinionState
             //There aren't any valid partners add a cooldown to reproduction so we dont stay in an infinite loop to look for partners
             if (validPartners.Count == 0)
             {
-                Owner.stats.ReproduceTimer = 10;
+                Owner.stats.ReproduceTimer = 5;
                 Owner.CheckForNewJob();
             }
             else
@@ -45,6 +45,10 @@ public class ReproductionState : IMinionState
 
     public void Update()
     {
+        //Something happenend with our partner?
+        if (chosenPartner == null)
+            Owner.CheckForNewJob();
+
         if (Vector2.Distance(Owner.transform.position, chosenPartner.transform.position) > .5f)
             MoveTowardsDestination();
         else
@@ -70,7 +74,7 @@ public class ReproductionState : IMinionState
     private void ReproduceWithPartner()
     {
         MinionManager.Instance.CreateNewMinion(0, Owner.transform.position);
-        Owner.stats.ReproduceTimer = Random.Range(30, 60);
+        Owner.stats.ReproduceTimer = Random.Range(15, 30);
         Owner.CheckForNewJob();
     }
 }

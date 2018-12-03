@@ -14,8 +14,11 @@ public class IdleState : IMinionState
     
     public void Update()
     {
+        if (Owner.Collectable == null)
+            Owner.Animator.SetBool("HasCollectable", false);
+
         if (destination == Vector2.zero)
-            destination = (Vector2)Owner.transform.position + Random.insideUnitCircle * 5;
+            destination = Random.insideUnitCircle * 10;
 
         //Are we in range to do work?
         if (Vector2.Distance(destination, Owner.transform.position) > 0.5)

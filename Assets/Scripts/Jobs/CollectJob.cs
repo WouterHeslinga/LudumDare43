@@ -16,7 +16,7 @@ public class CollectJob : Job
 
     private void NewDeliverJob()
     {
-        var newJob = new DeliverJob(collectable, Vector2.zero)
+        var newJob = new WareHouseDeliverJob(collectable, Vector2.zero)
         {
             Owner = Owner,
             JobQueue = JobQueue

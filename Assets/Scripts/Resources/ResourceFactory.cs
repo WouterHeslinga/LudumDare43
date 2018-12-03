@@ -6,7 +6,7 @@ public class ResourceFactory : MonoBehaviour
 {
     private static Dictionary<ResourceType, Sprite> resourceSprites;
 
-    private void Start()
+    private void Awake()
     {
         resourceSprites = new Dictionary<ResourceType, Sprite>()
         {
@@ -21,15 +21,18 @@ public class ResourceFactory : MonoBehaviour
     /// </summary>
     /// <param name="type">The type of resource</param>
     /// <param name="position">The position of the resource in world space</param>
-    public static void CreateResource(ResourceType type, Vector2 position)
+    public static GameObject CreateResource(ResourceType type, Vector2 position)
     {
         GameObject go = new GameObject();
         go.AddComponent<SpriteRenderer>().sprite = resourceSprites[type];
+        go.GetComponent<SpriteRenderer>().sortingOrder = 1;
         go.AddComponent<Resource>().Initialize(type);
         go.AddComponent<PolygonCollider2D>();
         go.name = $"{type}";
 
         go.transform.position = position;
+
+        return go;
     }
 
     /// <summary>

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Minion : MonoBehaviour, IHasInfoPanel
 {
+    [SerializeField] private GameObject corpsePrefab;
+
     public Transform Transform => transform;
 
     public StateMachine stateMachine { get; private set; }
@@ -67,8 +69,9 @@ public class Minion : MonoBehaviour, IHasInfoPanel
 
     public void Kill()
     {
-        ResourceFactory.CreateResource(1, 3, ResourceType.Bones, transform.position);
-        ResourceFactory.CreateResource(1, 3, ResourceType.Meat, transform.position);
+        Instantiate(corpsePrefab, transform.position, transform.rotation);
+
+        MinionManager.Instance.RemoveMinion(this);
 
         CurrentJob?.CancelJob();
 

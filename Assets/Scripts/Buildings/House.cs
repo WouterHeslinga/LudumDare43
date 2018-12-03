@@ -6,8 +6,8 @@ public class House : Building
 {
     private int populationIncrease = 10;
 
-    public override int BoneCost => 10;
-    public override int MeatCost => 10;
+    public override int BoneCost { get; set; } = 5;
+    public override int MeatCost { get; set; } = 5;
 
     protected override void Start()
     {

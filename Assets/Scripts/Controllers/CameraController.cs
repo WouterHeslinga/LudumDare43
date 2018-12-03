@@ -23,13 +23,13 @@ public class CameraController : MonoBehaviour
     private void CameraMovement()
     {
         //Camera panning
-        if (Input.GetMouseButton(2) || Input.GetMouseButton(1))
+        if (Input.GetMouseButton(2))
         {
             Vector3 diff = lastFramePosition - currentFramePosition;
             Camera.main.transform.Translate(diff);
         }
 
         Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxisRaw("Mouse ScrollWheel");
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 15f);
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 6f, 15f);
     }
 }

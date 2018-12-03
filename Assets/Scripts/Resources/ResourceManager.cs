@@ -16,9 +16,9 @@ public class ResourceManager : MonoBehaviour
     {
         Resources = new Dictionary<ResourceType, int>()
         {
-            {ResourceType.Bones, 5 },
-            {ResourceType.Food, 100 },
-            {ResourceType.Meat, 5 }
+            {ResourceType.Bones, 0 },
+            {ResourceType.Food, 0 },
+            {ResourceType.Meat, 0 }
         };
         OnResourcesChanged?.Invoke();
     }
@@ -32,7 +32,7 @@ public class ResourceManager : MonoBehaviour
     public void RemoveResources(ResourceType type, int amount)
     {
         if(EnoughResources(type, amount))
-            Resources[type] += amount;
+            Resources[type] -= amount;
 
         OnResourcesChanged?.Invoke();
         //TODO: error handling, show message on screen??
@@ -41,5 +41,10 @@ public class ResourceManager : MonoBehaviour
     private bool EnoughResources(ResourceType type, int amount)
     {
         return Resources[type] >= amount;
-    } 
+    }
+
+    public bool EnoughResources(Building selectedBuilding)
+    {
+        return EnoughResources(ResourceType.Bones, selectedBuilding.BoneCost) && EnoughResources(ResourceType.Meat, selectedBuilding.MeatCost);
+    }
 }

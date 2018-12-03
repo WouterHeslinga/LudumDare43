@@ -1,11 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class Resource : MonoBehaviour, ICollectable
+public class MinionCorpse : MonoBehaviour, ICollectable
 {
     public Transform Transform => transform;
     public bool IsActive
@@ -19,15 +16,12 @@ public class Resource : MonoBehaviour, ICollectable
             GetComponent<PolygonCollider2D>().enabled = value;
         }
     }
-    public ResourceType type;
 
     public void Collect()
     {
-        FindObjectOfType<JobQueue>().Enqueue(new CollectJob(this, transform.position));
-    }
+        if (FindObjectOfType<BuildingManager>().GetButchery() == null)
+            return; //TODO: feed back?
 
-    public void Initialize(ResourceType type)
-    {
-        this.type = type;
+        FindObjectOfType<JobQueue>().Enqueue(new ButcherCollectJob(this, transform.position));
     }
 }

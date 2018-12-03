@@ -14,6 +14,13 @@ public class JobQueue : MonoBehaviour
 
     public void Enqueue(Job job)
     {
+        Debug.Log("Enqueue " + job.GetType());
+        //foreach (Job j in jobs)
+        //{
+        //    if (j.Description == job.Description && j.Location == job.Location)
+        //        return;
+        //}
+
         jobs.Add(job);
     }
 
@@ -23,6 +30,7 @@ public class JobQueue : MonoBehaviour
             return null;
 
         Job newJob = jobs[0];
+        Debug.Log("Took " + newJob.GetType());
         newJob.JobQueue = this;
         newJob.Owner = owner;
 

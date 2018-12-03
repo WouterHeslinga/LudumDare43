@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 
-public class DeliverJob : Job
+public class WareHouseDeliverJob : Job
 {
     private ICollectable collectable;
     public override string Description => "Delivering";
 
-    public DeliverJob(ICollectable collectable, Vector2 location) : base(location, 1, null)
+    public WareHouseDeliverJob(ICollectable collectable, Vector2 location) : base(location, 1, null)
     {
-        Location = location;
         this.collectable = collectable;
 
+        WareHouse wareHouse = BuildingManager.Instance.GetWareHouse();
+        Location = wareHouse.GetRandomSpace();
+
         OnJobCompleted += () => { Owner.Collectable = null; };
+        OnJobCompleted += () => { wareHouse.DeliverResource(Location, collectable as Resource); };
     }
 
     public override void CancelJob()

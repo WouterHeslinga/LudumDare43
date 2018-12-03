@@ -25,7 +25,7 @@ public class WorkingState : IMinionState
         if (Owner.CurrentJob != null)
         {
             //Are we in range to do work?
-            if (Vector2.Distance(Owner.CurrentJob.Location, Owner.transform.position) > 0.5)
+            if (Vector2.Distance(Owner.CurrentJob.Location, Owner.transform.position) > 0.75)
                 MoveTowardsDestination();
             else
                 Owner.CurrentJob.DoWork();
@@ -36,7 +36,7 @@ public class WorkingState : IMinionState
         if (Owner.Collectable != null)
         {
             Owner.Animator.SetBool("HasCollectable", true);
-            Owner.Collectable.Transform.position = Owner.transform.position + Owner.transform.up;
+            Owner.Collectable.Transform.position = Owner.transform.position + (Owner.transform.up / 2);
         }
         else
             Owner.Animator.SetBool("HasCollectable", false);

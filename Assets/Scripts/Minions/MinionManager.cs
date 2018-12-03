@@ -18,6 +18,7 @@ public class MinionManager : MonoBehaviour
 
     public int Population => allMinions.Count;
     public int MaxPopulation { get; private set; } = 10;
+    public bool HaveMinionSpace => Population < MaxPopulation - 1; //Keep in mind that minion always produce 2 minions
 
     private void Awake()
     {

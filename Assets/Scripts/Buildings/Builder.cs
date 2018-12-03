@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Builder : MonoBehaviour
 {
+    [SerializeField] private GameObject buildingPlaceholder;
     private Building selectedBuilding;
     private GameObject buildingGhost;
 
@@ -48,13 +50,14 @@ public class Builder : MonoBehaviour
             }
             else
             {
-                //TODO: Check if we have enough resources to build this building
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && FindObjectOfType<ResourceManager>().EnoughResources(selectedBuilding) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     Destroy(buildingGhost);
                     buildingGhost = null;
 
-                    Instantiate(selectedBuilding, pos, Quaternion.Euler(rotation));
+                    var placeholder = Instantiate(buildingPlaceholder, pos, Quaternion.Euler(rotation));
+                    placeholder.GetComponent<BuildingPlaceHolder>().Initialize(selectedBuilding);
+
                     rotation = Vector3.zero;
                 }
 

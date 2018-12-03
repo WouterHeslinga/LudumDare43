@@ -5,12 +5,12 @@ using UnityEngine.EventSystems;
 
 public class TooltipText : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private string title;
-    [SerializeField] private string text;
+    public string Title;
+    public string Text;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Tooltip.Instance.Show(text, title);
+        Tooltip.Instance.Show(Text, Title);
     }
 
     public void OnPointerExit(PointerEventData eventData)

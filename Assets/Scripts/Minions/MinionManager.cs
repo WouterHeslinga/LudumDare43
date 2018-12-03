@@ -28,6 +28,11 @@ public class MinionManager : MonoBehaviour
         allMinions = new List<Minion>();
     }
 
+    private void Update()
+    {
+        Debug.Log(HaveMinionSpace);
+    }
+
     private void Start()
     {
         CreateNewMinion(-1, UnityEngine.Random.insideUnitCircle);
@@ -56,13 +61,19 @@ public class MinionManager : MonoBehaviour
         foreach (Minion partner in allMinions)
         {
             //We don't allow same sex reproduction
-            if (minion.stats.Gender == partner.stats.Gender || partner.stats.CanReproduce == false && minion == partner)
+            if (minion.stats.Gender == partner.stats.Gender || partner.stats.CanReproduce == false || minion == partner || partner.stateMachine.Status == MinionStatus.Reproducing)
                 continue;
 
             output.Add(partner);
         }
 
         return output;
+    }
+
+    public Minion GetTarget(Minion owner)
+    {
+        var targets = allMinions.Where(min => min != owner).ToList();
+        return targets[UnityEngine.Random.Range(0, targets.Count)];
     }
 
     public void CreateNewMinion(int age, Vector2 position)

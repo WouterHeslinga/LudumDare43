@@ -9,12 +9,12 @@ public class MinionStats : IStats
     {
         this.owner = owner;
         Gender = (Gender)UnityEngine.Random.Range(0, Enum.GetNames(typeof(Gender)).Length);
-        Age = age == -1 ? UnityEngine.Random.Range(18, 40) : age;
+        Age = age == -1 ? UnityEngine.Random.Range(18, 35) : age;
         Health = 100;
         Hunger = 100;
         Sanity = 100;
-        MaxSpeed = 3;
-        ReproduceTimer = UnityEngine.Random.Range(15, 30);
+        MaxSpeed = 2;
+        ReproduceTimer = UnityEngine.Random.Range(25, 50);
     }
 
     public StatChanged OnStatChanged { get; set; }
@@ -24,40 +24,45 @@ public class MinionStats : IStats
     public int Age { get; private set; }
     public int Health { get; private set; }
     public int Hunger { get; set; }
-    public int Sanity { get; private set; }
+    public int Sanity { get; set; }
     public float MaxSpeed { get; private set; }
     public string Status => owner.stateMachine.Status.ToString();
 
-    public bool IsHungry => Hunger <= 40;
-    public bool IsSane => Sanity > 40;
-    public bool CanReproduce => Age >= 18 && ReproduceTimer <= 0;
-    public float Speed => MaxSpeed;
+    public bool IsHungry => Hunger <= 50;
+    public bool CanReproduce => Age >= 16 && ReproduceTimer <= 0;
+    public float CurrentSpeed => (1f- ((float)Age / 125f)) * MaxSpeed;
+    public float EatingCooldown = 0;
 
-    private float ageTimer = 1;
+    private float ageTimer = 3;
     public float ReproduceTimer { get; set; }
     public bool CanWork => Age >= 12 && !IsHungry;
 
     public void UpdateStats()
     {
         Hunger--;
-        Sanity--;
 
         ReproduceTimer--;
         ageTimer--;
+        EatingCooldown--;
 
         if (ageTimer <= 0)
         {
             Age++;
-            ageTimer = 1;
+            ageTimer = 3;
 
-            if(Age > 75)
+            if(Age > 70)
             {
                 var diff = Age - 75;
-                var percentage = 4 * diff;
+                var percentage = 3 * diff;
 
                 if (UnityEngine.Random.Range(0, 100) < percentage)
-                    owner.Kill();
+                    owner.Die(false);
             }
+        }
+
+        if (Hunger <= 0)
+        {
+            owner.Die(false);
         }
 
         OnStatChanged?.Invoke(this);
@@ -65,7 +70,13 @@ public class MinionStats : IStats
 
     public IMinionState GetNeeds()
     {
-        if (CanReproduce && !IsHungry && IsSane && MinionManager.Instance.HaveMinionSpace)
+        if (Sanity <= 0)
+            return new InsaneState();
+
+        if (IsHungry && EatingCooldown <= 0)
+            return new EatingState();
+
+        if (CanReproduce && !IsHungry && MinionManager.Instance.HaveMinionSpace)
             return new ReproductionState();
 
         return null;

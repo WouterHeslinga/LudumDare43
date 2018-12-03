@@ -9,6 +9,7 @@ public class ReproductionState : IMinionState
 
     private List<Minion> validPartners;
     private Minion chosenPartner;
+    private float reproductionDuration = 5;
 
     public ReproductionState(Minion partner = null)
     {
@@ -46,8 +47,11 @@ public class ReproductionState : IMinionState
     public void Update()
     {
         //Something happenend with our partner?
-        if (chosenPartner == null)
+        if (chosenPartner == null || !MinionManager.Instance.HaveMinionSpace)
             Owner.CheckForNewJob();
+
+        if (Owner == null && chosenPartner != null)
+            chosenPartner.CheckForNewJob();            
 
         if (Vector2.Distance(Owner.transform.position, chosenPartner.transform.position) > .5f)
             MoveTowardsDestination();
@@ -59,7 +63,7 @@ public class ReproductionState : IMinionState
     {
         Owner.Animator.SetBool("IsMoving", true);
         LookAtDestination();
-        Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, chosenPartner.transform.position, Owner.stats.Speed * Time.deltaTime);
+        Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, chosenPartner.transform.position, Owner.stats.CurrentSpeed * Time.deltaTime);
     }
 
     private void LookAtDestination()
@@ -73,8 +77,12 @@ public class ReproductionState : IMinionState
 
     private void ReproduceWithPartner()
     {
-        MinionManager.Instance.CreateNewMinion(0, Owner.transform.position);
-        Owner.stats.ReproduceTimer = Random.Range(15, 30);
-        Owner.CheckForNewJob();
+        reproductionDuration -= Time.deltaTime;
+        if(reproductionDuration <= 0)
+        {
+            MinionManager.Instance.CreateNewMinion(0, Owner.transform.position);
+            Owner.stats.ReproduceTimer = Random.Range(25, 50);
+            Owner.CheckForNewJob();
+        }
     }
 }

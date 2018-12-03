@@ -13,7 +13,6 @@ public class ButcherJob : Job
 
         OnJobCompleted += () => { Owner.CurrentJob = null; };
         OnJobCompleted += () => { Owner.Collectable = null; };
-        OnJobCompleted += () => { Owner.Animator.SetBool("IsButchering", false); };
     }
 
     public override void DoWork()

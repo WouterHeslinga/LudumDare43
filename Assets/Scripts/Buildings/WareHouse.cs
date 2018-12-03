@@ -9,7 +9,7 @@ public class WareHouse : Building
     public override int MeatCost { get; set; } = 10;
     public int ResourceSpace;
     private int resourceInside;
-
+    public override string TooltipText => $"Bones: {BoneCost}\nMeat: {MeatCost}\nStores resources";
     public bool HasSpace => resourceInside < ResourceSpace;
 
     public List<Transform> wareHouseSpots;
@@ -34,11 +34,27 @@ public class WareHouse : Building
             var resource = ResourceFactory.CreateResource(ResourceType.Meat, location);
             DeliverResource(GetRandomSpace(), resource.GetComponent<Resource>());
         }
+
+        for (int i = 0; i < 10; i++)
+        {
+            var location = GetRandomSpace();
+            var resource = ResourceFactory.CreateResource(ResourceType.Food, location);
+            DeliverResource(GetRandomSpace(), resource.GetComponent<Resource>());
+        }
     }
 
     public Vector2 GetRandomSpace()
     {
         return wareHouseSpots[Random.Range(0, wareHouseSpots.Count)].position;
+    }
+
+    public void Deliver(Vector2 deliverPosition, ICollectable collectable)
+    {
+        if(collectable.GetType() == typeof(Resource))
+            DeliverResource(deliverPosition, collectable as Resource);
+
+        else if (collectable.GetType() == typeof(ResourceCrate))
+            DeliverCrate(collectable as ResourceCrate);
     }
 
     public void DeliverResource(Vector2 deliverPosition, Resource resource)
@@ -52,7 +68,21 @@ public class WareHouse : Building
         FindObjectOfType<ResourceManager>().AddResources(resource.type, 1);
     }
 
-    public Resource GetResourceLocation(ResourceType type)
+    private void DeliverCrate(ResourceCrate crate)
+    {
+        foreach (var item in crate.resources)
+        {
+            for (int i = 0; i < item.Value; i++)
+            {
+                var spot = GetRandomSpace();
+                var resource = ResourceFactory.CreateResource(item.Key, spot).GetComponent<Resource>();
+                DeliverResource(spot, resource);
+            }
+        }
+        Destroy(crate.gameObject);
+    }
+
+    public Resource GetResource(ResourceType type)
     {
         foreach (var item in Inventory)
         {

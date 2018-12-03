@@ -1,13 +1,18 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class Resource : MonoBehaviour, ICollectable
+public class ResourceCrate : MonoBehaviour, ICollectable
 {
     public Transform Transform => transform;
+    public bool IsBeingCollected = false;
+    public Dictionary<ResourceType, int> resources;
+
+    public void Initialize(Dictionary<ResourceType, int> resources)
+    {
+        this.resources = resources;
+    }
+
     public bool IsActive
     {
         get
@@ -19,28 +24,22 @@ public class Resource : MonoBehaviour, ICollectable
             GetComponent<PolygonCollider2D>().enabled = value;
         }
     }
-    public ResourceType type;
-    private bool isBeingCollected = false;
 
     public void Collect()
     {
-        if (isBeingCollected)
+        if (FindObjectOfType<BuildingManager>().GetWareHouse() == null)
+        {
+            ErrorMessages.Instance.ShowMessage("Requires WareHouse");
+            return;
+        }
+
+        if (IsBeingCollected)
         {
             ErrorMessages.Instance.ShowMessage("Already being collected");
             return;
         }
 
-        isBeingCollected = true;
+        IsBeingCollected = true;
         FindObjectOfType<JobQueue>().Enqueue(new CollectJob(this, transform.position));
-    }
-
-    public void Initialize(ResourceType type)
-    {
-        this.type = type;
-    }
-
-    public void Destroy()
-    {
-        Destroy(gameObject);
     }
 }

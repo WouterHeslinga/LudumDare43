@@ -5,10 +5,12 @@ using System.Linq;
 
 public class Butchery : Building
 {
-    public override int BoneCost { get; set; } = 1;
-    public override int MeatCost { get; set; } = 1;
-    public bool Busy { get; private set; }
+    [SerializeField] private GameObject resourceCratePrefab;
 
+    public override int BoneCost { get; set; } = 6;
+    public override int MeatCost { get; set; } = 5;
+    public bool Busy { get; private set; }
+    public override string TooltipText => $"Bones: {BoneCost}\nMeat: {MeatCost}\nUsed by minions to butcher corpses for resources";
     public Transform butcheringSpot;
     public List<Transform> corpseSpots;
     public Transform resourceOutput;
@@ -34,8 +36,13 @@ public class Butchery : Building
         if (inventory.Count == 0)
             return;
 
-        ResourceFactory.CreateResource(2, 5, ResourceType.Food, resourceOutput.position);
-        ResourceFactory.CreateResource(1, 3, ResourceType.Bones, resourceOutput.position);
+        var crate = Instantiate(resourceCratePrefab, resourceOutput.transform.position, Quaternion.identity).GetComponent<ResourceCrate>();
+        crate.Initialize(new Dictionary<ResourceType, int>()
+        {
+            { ResourceType.Bones, Random.Range(1,3) },
+            { ResourceType.Meat, Random.Range(1,3) },
+            { ResourceType.Food, Random.Range(5,10) },
+        });
 
         Destroy(inventory[0].Value.Transform.gameObject);
         inventory.RemoveAt(0);

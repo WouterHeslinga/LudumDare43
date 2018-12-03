@@ -30,6 +30,6 @@ public class CameraController : MonoBehaviour
         }
 
         Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxisRaw("Mouse ScrollWheel");
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 6f, 15f);
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 5f, 13f);
     }
 }

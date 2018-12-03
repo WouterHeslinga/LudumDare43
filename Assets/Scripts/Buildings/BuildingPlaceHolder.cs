@@ -7,6 +7,7 @@ public class BuildingPlaceHolder : Building
     public override int BoneCost { get; set; } = 0;
     public override int MeatCost { get; set; } = 0;
     public Building buildingToBuild;
+    public override string TooltipText => $"";
 
     private List<ICollectable> deliveredResources;
 
@@ -24,7 +25,7 @@ public class BuildingPlaceHolder : Building
         {
             var wareHouse = BuildingManager.Instance.GetWareHouse();
             var spot = wareHouse.GetRandomSpace();
-            var res = wareHouse.GetResourceLocation(ResourceType.Bones);
+            var res = wareHouse.GetResource(ResourceType.Bones);
 
             FindObjectOfType<JobQueue>().Enqueue(new ConstructionCollectJob(this, res, spot));
         }
@@ -33,7 +34,7 @@ public class BuildingPlaceHolder : Building
         {
             var wareHouse = BuildingManager.Instance.GetWareHouse();
             var spot = wareHouse.GetRandomSpace();
-            var res = wareHouse.GetResourceLocation(ResourceType.Meat);
+            var res = wareHouse.GetResource(ResourceType.Meat);
 
             FindObjectOfType<JobQueue>().Enqueue(new ConstructionCollectJob(this, res, spot));
         }
@@ -42,6 +43,7 @@ public class BuildingPlaceHolder : Building
     public void AddResource(ICollectable resource)
     {
         var res = resource as Resource;
+        res.IsActive = false;
 
         if (res.type == ResourceType.Bones)
             BoneCost++;
@@ -62,6 +64,7 @@ public class BuildingPlaceHolder : Building
             Destroy(item.Transform.gameObject);
         }
 
+        var pos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
         var newBuilding = Instantiate(buildingToBuild, transform.position, transform.rotation);
         Destroy(gameObject);
     }

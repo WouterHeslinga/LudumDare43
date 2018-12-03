@@ -2,5 +2,7 @@
 {
     Idle,
     Working,
-    Reproducing
+    Reproducing,
+    Eating,
+    GoingInsane
 }

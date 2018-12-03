@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ResourceFactory : MonoBehaviour
 {
+    [SerializeField] private GameObject resourceCratePrefab;
+
     private static Dictionary<ResourceType, Sprite> resourceSprites;
 
     private void Awake()
@@ -29,6 +31,7 @@ public class ResourceFactory : MonoBehaviour
         go.AddComponent<Resource>().Initialize(type);
         go.AddComponent<PolygonCollider2D>();
         go.name = $"{type}";
+        go.transform.localScale *= 1.1f;
 
         go.transform.position = position;
 

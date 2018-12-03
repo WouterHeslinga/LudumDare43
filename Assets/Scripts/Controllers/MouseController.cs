@@ -48,6 +48,15 @@ public class MouseController : MonoBehaviour
                 if (hit.transform?.GetComponent<Minion>() != null)
                 {
                     var entity = hit.transform.GetComponent<Minion>();
+                    var nearbyEntities = Physics2D.BoxCastAll(entity.transform.position, new Vector2(2.5f, 2.5f), 0, Vector2.zero);
+                    foreach (var item in nearbyEntities)
+                    {
+                        if (item.transform.GetComponent<Minion>() != null)
+                        {
+                            item.transform.GetComponent<Minion>().stats.Sanity -= 50;
+                        }
+                    }
+
                     handOfGod.Sacrifice(entity);
                 }
             }

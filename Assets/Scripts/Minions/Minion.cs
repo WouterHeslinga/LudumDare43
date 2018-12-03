@@ -39,7 +39,7 @@ public class Minion : MonoBehaviour, IHasInfoPanel
             stateMachine.ChangeState(new IdleState());
 
         //Check if our stats need work.
-        if(stats.GetNeeds() != null)
+        if (stats.GetNeeds() != null)
         {
             var newState = stats.GetNeeds();
             stateMachine.ChangeState(newState);
@@ -67,14 +67,31 @@ public class Minion : MonoBehaviour, IHasInfoPanel
         stats.UpdateStats();
     }
 
-    public void Kill()
+    public void Die(bool spawnCorpse)
     {
-        Instantiate(corpsePrefab, transform.position, transform.rotation);
+        StartCoroutine(FadeTo(0, 1, spawnCorpse));
+    }
 
-        MinionManager.Instance.RemoveMinion(this);
+    IEnumerator FadeTo(float aValue, float aTime, bool spawnCorpse)
+    {
+        float alpha = transform.GetComponent<SpriteRenderer>().material.color.a;
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
+        {
+            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
+            transform.GetComponent<SpriteRenderer>().material.color = newColor;
+            yield return null;
 
-        CurrentJob?.CancelJob();
+            if(newColor.a <= 0.1f)
+            {
+                if (spawnCorpse)
+                    Instantiate(corpsePrefab, transform.position, transform.rotation);
 
-        Destroy(gameObject);
+                MinionManager.Instance.RemoveMinion(this);
+
+                CurrentJob?.CancelJob();
+
+                Destroy(gameObject);
+            }
+        }
     }
 }

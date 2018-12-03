@@ -20,6 +20,10 @@ public class BuilderInterface : MonoBehaviour
             var button = Instantiate(buttonPrefab, buttonPanel.transform);
             var sprite = button.GetComponent<Image>().sprite = building.interfaceSprite;
             button.GetComponent<Button>().onClick.AddListener(() => builder.SelectBuilding(index));
+
+            var tooltip = button.GetComponent<TooltipText>();
+            tooltip.Title = building.GetType().ToString();
+            tooltip.Text = building.TooltipText;
         }
     }
 }

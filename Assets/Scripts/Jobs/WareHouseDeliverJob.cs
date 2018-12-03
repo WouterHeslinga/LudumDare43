@@ -13,7 +13,7 @@ public class WareHouseDeliverJob : Job
         Location = wareHouse.GetRandomSpace();
 
         OnJobCompleted += () => { Owner.Collectable = null; };
-        OnJobCompleted += () => { wareHouse.DeliverResource(Location, collectable as Resource); };
+        OnJobCompleted += () => { wareHouse.Deliver(Location, collectable); };
     }
 
     public override void CancelJob()

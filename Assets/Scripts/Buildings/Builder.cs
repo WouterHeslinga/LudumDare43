@@ -44,7 +44,7 @@ public class Builder : MonoBehaviour
                 buildingGhost.transform.Rotate(0, 0, -90);
             }
 
-            if (IsHoveringOverOtherBuilding(pos))
+            if (IsHoveringOverOtherBuilding(pos) || !FindObjectOfType<ResourceManager>().EnoughResources(selectedBuilding))
             {
                 spriteRend.color = Red;
             }

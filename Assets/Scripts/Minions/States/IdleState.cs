@@ -14,8 +14,11 @@ public class IdleState : IMinionState
     
     public void Update()
     {
-        if (Owner.Collectable == null)
+        if (Owner.Collectable == null && Owner.CurrentJob == null)
+        {
             Owner.Animator.SetBool("HasCollectable", false);
+            Owner.Animator.SetBool("IsButchering", false);
+        }
 
         if (destination == Vector2.zero)
             destination = Random.insideUnitCircle * 10;
@@ -34,7 +37,7 @@ public class IdleState : IMinionState
     {
         Owner.Animator.SetBool("IsMoving", true);
         LookAtDestination();
-        Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, destination, Owner.stats.Speed * Time.deltaTime);
+        Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, destination, Owner.stats.CurrentSpeed * Time.deltaTime);
     }
 
     private void LookAtDestination()

@@ -24,7 +24,7 @@ public class Tooltip : MonoBehaviour
 
     private void Update()
     {
-        tooltipPanel.transform.position = Input.mousePosition + new Vector3(tooltipPanel.GetComponent<RectTransform>().rect.width / 2, -tooltipPanel.GetComponent<RectTransform>().rect.height);
+        tooltipPanel.transform.position = Input.mousePosition + new Vector3(Input.mousePosition.x > Screen.width/2 ? -tooltipPanel.GetComponent<RectTransform>().rect.width / 2 : tooltipPanel.GetComponent<RectTransform>().rect.width / 2, Input.mousePosition.y > Screen.height /2 ? -tooltipPanel.GetComponent<RectTransform>().rect.height / 1.5f : tooltipPanel.GetComponent<RectTransform>().rect.height / 1.5f);
     }
 
     public void Hide()

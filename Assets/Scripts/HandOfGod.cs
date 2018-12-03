@@ -8,6 +8,6 @@ public class HandOfGod
 {
     public void Sacrifice(Minion minion)
     {
-        minion.Kill();
+        minion.Die(true);
     }
 }

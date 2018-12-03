@@ -46,7 +46,7 @@ public class WorkingState : IMinionState
     {
         Owner.Animator.SetBool("IsMoving", true);
         LookAtDestination();
-        Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, Owner.CurrentJob.Location, Owner.stats.Speed * Time.deltaTime);
+        Owner.transform.position = Vector2.MoveTowards(Owner.transform.position, Owner.CurrentJob.Location, Owner.stats.CurrentSpeed * Time.deltaTime);
     }
 
     private void LookAtDestination()

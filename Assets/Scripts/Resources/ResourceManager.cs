@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
+    public static ResourceManager Instance;
+
     public delegate void ResourcesChanged();
     public ResourcesChanged OnResourcesChanged;
 
@@ -14,6 +16,9 @@ public class ResourceManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+
         Resources = new Dictionary<ResourceType, int>()
         {
             {ResourceType.Bones, 0 },
@@ -35,16 +40,21 @@ public class ResourceManager : MonoBehaviour
             Resources[type] -= amount;
 
         OnResourcesChanged?.Invoke();
-        //TODO: error handling, show message on screen??
     }
 
-    private bool EnoughResources(ResourceType type, int amount)
+    public bool EnoughResources(ResourceType type, int amount)
     {
         return Resources[type] >= amount;
     }
 
     public bool EnoughResources(Building selectedBuilding)
     {
-        return EnoughResources(ResourceType.Bones, selectedBuilding.BoneCost) && EnoughResources(ResourceType.Meat, selectedBuilding.MeatCost);
+        if(EnoughResources(ResourceType.Bones, selectedBuilding.BoneCost) && EnoughResources(ResourceType.Meat, selectedBuilding.MeatCost))
+            return true;
+        else
+        {
+            ErrorMessages.Instance.ShowMessage("Not enough resources");
+            return false;
+        }
     }
 }

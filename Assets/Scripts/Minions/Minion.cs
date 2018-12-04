@@ -6,6 +6,7 @@ using UnityEngine;
 public class Minion : MonoBehaviour, IHasInfoPanel
 {
     [SerializeField] private GameObject corpsePrefab;
+    [SerializeField] private GameObject gravestone;
 
     public Transform Transform => transform;
 
@@ -71,6 +72,8 @@ public class Minion : MonoBehaviour, IHasInfoPanel
     {
         if (spawnCorpse)
             Instantiate(corpsePrefab, transform.position, transform.rotation);
+        else
+            Instantiate(gravestone, transform.position, Quaternion.identity);
 
         MinionManager.Instance.RemoveMinion(this);
 

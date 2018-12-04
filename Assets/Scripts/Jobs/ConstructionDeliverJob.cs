@@ -11,8 +11,9 @@ public class ConstructionDeliverJob : Job
     public override string Description => "Constructing";
     private BuildingPlaceHolder construction;
 
-    public ConstructionDeliverJob(BuildingPlaceHolder construction, Vector2 location) : base(location, 1, null)
+    public ConstructionDeliverJob(ICollectable collectable, BuildingPlaceHolder construction, Vector2 location) : base(location, 1, null)
     {
+        this.collectable = collectable;
         this.construction = construction;
         Location = location;
 

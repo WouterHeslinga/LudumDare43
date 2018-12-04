@@ -14,7 +14,7 @@ public class MinionStats : IStats
         Hunger = 100;
         Sanity = 100;
         MaxSpeed = 2;
-        ReproduceTimer = UnityEngine.Random.Range(40, 60);
+        ReproduceTimer = UnityEngine.Random.Range(20, 40);
     }
 
     public StatChanged OnStatChanged { get; set; }

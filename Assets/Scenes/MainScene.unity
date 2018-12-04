@@ -654,6 +654,35 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 219186920}
+    - target: {fileID: 423037356, guid: 9409ebd4b2cf0e14d9ffd7eb02c18542, type: 3}
+      propertyPath: m_Text
+      value: 'Controls
+
+        LeftMouseButton - show minion stats & collect resource/corpse
+
+        RightMouseButton - Sacrifice minion
+
+        MouseScroll - Zoom
+
+        MiddleMouseButton + move Mouse = camera pan
+
+
+        Minions
+
+        Minions don''t like it if you sacrifice minions close to them, they might
+        go insane!
+
+
+        Resources
+
+        Resources are needed to build buildings, resources are gathered by butchering
+        corpses in the butchery building (Butchery is very important)
+
+
+        How to Win?
+
+        To win the game all you have to do is build an Altar!'
+      objectReference: {fileID: 0}
     - target: {fileID: 69696094, guid: 9409ebd4b2cf0e14d9ffd7eb02c18542, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

@@ -29,13 +29,13 @@ public class ReproductionState : IMinionState
             //There aren't any valid partners add a cooldown to reproduction so we dont stay in an infinite loop to look for partners
             if (validPartners.Count == 0)
             {
-                Owner.stats.ReproduceTimer = 5;
+                Owner.stats.ReproduceTimer = 2;
                 Owner.CheckForNewJob();
             }
             else
             {
                 //Pick a partner and force that partner to reproduce
-                chosenPartner = validPartners[Random.Range(0, validPartners.Count - 1)];
+                chosenPartner = validPartners[Random.Range(0, validPartners.Count)];
                 chosenPartner.stateMachine.ChangeState(new ReproductionState(Owner));
             }
         }
@@ -83,7 +83,7 @@ public class ReproductionState : IMinionState
         if(reproductionDuration <= 0)
         {
             minionManager.CreateNewMinion(0, Owner.transform.position);
-            Owner.stats.ReproduceTimer = Random.Range(25, 50);
+            Owner.stats.ReproduceTimer = Random.Range(20, 40);
             Owner.CheckForNewJob();
         }
     }

@@ -24,11 +24,10 @@ public class ConstructionCollectJob : Job
 
     private void NewDeliverJob()
     {
-        var newJob = new ConstructionDeliverJob(construction, construction.transform.position)
+        var newJob = new ConstructionDeliverJob(collectable, construction, construction.transform.position)
         {
             Owner = Owner,
             JobQueue = JobQueue,
-            collectable = collectable
         };
 
         Owner.CurrentJob = newJob;

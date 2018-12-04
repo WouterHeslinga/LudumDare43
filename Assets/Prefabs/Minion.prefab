@@ -96,6 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   corpsePrefab: {fileID: 1997775105850223013, guid: f54600e7f7099ca4fa21253accdd2540,
     type: 3}
+  gravestone: {fileID: 2770865948053287832, guid: 80fa6f2aef6429d4ebd5b602a5d0ee6e,
+    type: 3}
 --- !u!61 &2040654312271665802
 BoxCollider2D:
   m_ObjectHideFlags: 0

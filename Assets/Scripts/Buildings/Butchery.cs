@@ -7,7 +7,7 @@ public class Butchery : Building
 {
     [SerializeField] private GameObject resourceCratePrefab;
 
-    public override int BoneCost { get; set; } = 6;
+    public override int BoneCost { get; set; } = 5;
     public override int MeatCost { get; set; } = 5;
     public bool Busy { get; private set; }
     public override string TooltipText => $"Bones: {BoneCost}\nMeat: {MeatCost}\nUsed by minions to butcher corpses for resources";
@@ -27,27 +27,25 @@ public class Butchery : Building
         if(!Busy && inventory.Count > 0)
         {
             Busy = true;
-            FindObjectOfType<JobQueue>().Enqueue(new ButcherJob(butcheringSpot.position, () => { CompleteButcheringJob(); }));
+            FindObjectOfType<JobQueue>().Enqueue(new ButcherJob(butcheringSpot.position, this));
         }
     }
 
-    private void CompleteButcheringJob()
+    public void CreateCrate()
     {
-        if (inventory.Count == 0)
-            return;
-
         var crate = Instantiate(resourceCratePrefab, resourceOutput.transform.position, Quaternion.identity).GetComponent<ResourceCrate>();
         crate.Initialize(new Dictionary<ResourceType, int>()
         {
             { ResourceType.Bones, Random.Range(1,3) },
             { ResourceType.Meat, Random.Range(1,3) },
-            { ResourceType.Food, Random.Range(5,10) },
+            { ResourceType.Food, Random.Range(4,8) },
         });
 
-        Destroy(inventory[0].Value.Transform.gameObject);
-        inventory.RemoveAt(0);
-
         Busy = false;
+
+        var obj = inventory[0].Value.Transform.gameObject;
+        inventory.RemoveAt(0);
+        Destroy(obj);
     }
 
     public Vector2 RandomSpot => corpseSpots[Random.Range(0, corpseSpots.Count)].position;
@@ -57,7 +55,5 @@ public class Butchery : Building
         int index = corpseSpots.IndexOf(corpseSpots.First(x => (Vector2)x.transform.position == deliverLocation));
         corpse.IsActive = false;
         inventory.Add(new KeyValuePair<int, ICollectable>(index, corpse));
-
-        corpse.Transform.position = deliverLocation;
     }
 }

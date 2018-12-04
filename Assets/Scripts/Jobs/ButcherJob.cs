@@ -7,10 +7,14 @@ using UnityEngine;
 
 public class ButcherJob : Job
 {
-    public ButcherJob(Vector2 location, JobCompleted jobCompletion = null) : base(location, 5, jobCompletion)
-    {
-        Location = location;        
+    private Butchery butcher;
 
+    public ButcherJob(Vector2 location, Butchery butcher) : base(location, 5, null)
+    {
+        Location = location;
+        this.butcher = butcher;
+
+        OnJobCompleted += () => { this.butcher.CreateCrate(); };
         OnJobCompleted += () => { Owner.CurrentJob = null; };
         OnJobCompleted += () => { Owner.Collectable = null; };
     }
@@ -19,6 +23,12 @@ public class ButcherJob : Job
     {
         base.DoWork();
         Owner.Animator.SetBool("IsButchering", true);
-        Owner.Animator.SetBool("IsRunning", false);
+        Owner.Animator.SetBool("IsMoving", false);
+    }
+
+    public override void CancelJob()
+    {
+        base.CancelJob();
+        Owner.Animator.SetBool("IsButchering", false);
     }
 }

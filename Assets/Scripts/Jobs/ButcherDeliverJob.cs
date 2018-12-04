@@ -22,6 +22,7 @@ public class ButcherDeliveryJob : Job
 
     public override void CancelJob()
     {
+        Owner.Collectable = null;
         JobQueue.Enqueue(new ButcherCollectJob(collectable, collectable.Transform.position));
     }
 }

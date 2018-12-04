@@ -22,7 +22,11 @@ public class ConstructionDeliverJob : Job
 
     public override void CancelJob()
     {
-        var newJob = new ConstructionCollectJob(construction, (Resource)collectable, collectable.Transform.position);
+        Owner.Collectable = null;
+        var newJob = new ConstructionCollectJob(construction, (Resource)collectable, collectable.Transform.position)
+        {
+            JobQueue = JobQueue
+        };
         JobQueue.Enqueue(newJob);
     }
 }

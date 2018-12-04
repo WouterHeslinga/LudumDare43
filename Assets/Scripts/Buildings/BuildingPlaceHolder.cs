@@ -8,13 +8,32 @@ public class BuildingPlaceHolder : Building
     public override int MeatCost { get; set; } = 0;
     public Building buildingToBuild;
     public override string TooltipText => $"";
+    private JobQueue jobQueue;
 
     private List<ICollectable> deliveredResources;
+    private float cooldown = 60;
 
     // Start is called before the first frame update
     new private void Start()
     {
         deliveredResources = new List<ICollectable>();
+        jobQueue = FindObjectOfType<JobQueue>();
+    }
+
+    private void Update()
+    {
+        cooldown -= Time.deltaTime;
+
+        if(!jobQueue.ConstructionJobsAvailable() && cooldown <= 0)
+        {
+            if (BoneCost < buildingToBuild.BoneCost)
+                AskResources(ResourceType.Bones);
+
+            if(MeatCost < buildingToBuild.MeatCost)
+                AskResources(ResourceType.Meat);
+
+            cooldown = 60;
+        }
     }
 
     public void Initialize(Building buildingToBuild)
@@ -23,20 +42,12 @@ public class BuildingPlaceHolder : Building
 
         for (int i = 0; i < buildingToBuild.BoneCost; i++)
         {
-            var wareHouse = BuildingManager.Instance.GetWareHouse();
-            var spot = wareHouse.GetRandomSpace();
-            var res = wareHouse.GetResource(ResourceType.Bones);
-
-            FindObjectOfType<JobQueue>().Enqueue(new ConstructionCollectJob(this, res, spot));
+            AskResources(ResourceType.Bones);
         }
 
         for (int i = 0; i < buildingToBuild.MeatCost; i++)
         {
-            var wareHouse = BuildingManager.Instance.GetWareHouse();
-            var spot = wareHouse.GetRandomSpace();
-            var res = wareHouse.GetResource(ResourceType.Meat);
-
-            FindObjectOfType<JobQueue>().Enqueue(new ConstructionCollectJob(this, res, spot));
+            AskResources(ResourceType.Meat);
         }
     }
 
@@ -67,5 +78,14 @@ public class BuildingPlaceHolder : Building
         var pos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
         var newBuilding = Instantiate(buildingToBuild, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+
+    private void AskResources(ResourceType type)
+    {
+        var wareHouse = BuildingManager.Instance.GetWareHouse();
+        var spot = wareHouse.GetRandomSpace();
+        var res = wareHouse.GetResource(type);
+
+        FindObjectOfType<JobQueue>().Enqueue(new ConstructionCollectJob(this, res, spot));
     }
 }

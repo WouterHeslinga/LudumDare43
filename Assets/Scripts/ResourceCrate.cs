@@ -38,8 +38,8 @@ public class ResourceCrate : MonoBehaviour, ICollectable
             ErrorMessages.Instance.ShowMessage("Already being collected");
             return;
         }
-
         IsBeingCollected = true;
+
         FindObjectOfType<JobQueue>().Enqueue(new CollectJob(this, transform.position));
     }
 }

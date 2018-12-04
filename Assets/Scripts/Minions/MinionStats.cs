@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class MinionStats : IStats
 {
-    public MinionStats(Minion owner, int age = -1)
+    public MinionStats(Minion owner, Gender gender, int age = -1)
     {
         this.owner = owner;
-        Gender = (Gender)UnityEngine.Random.Range(0, Enum.GetNames(typeof(Gender)).Length);
+        Gender = gender == Gender.Random ? (Gender)UnityEngine.Random.Range(0, Enum.GetNames(typeof(Gender)).Length - 1) : gender;
         Age = age == -1 ? UnityEngine.Random.Range(18, 35) : age;
         Health = 100;
         Hunger = 100;
         Sanity = 100;
         MaxSpeed = 2;
-        ReproduceTimer = UnityEngine.Random.Range(25, 50);
+        ReproduceTimer = UnityEngine.Random.Range(40, 60);
     }
 
     public StatChanged OnStatChanged { get; set; }
@@ -25,7 +25,7 @@ public class MinionStats : IStats
     public int Health { get; private set; }
     public int Hunger { get; set; }
     public int Sanity { get; set; }
-    public float MaxSpeed { get; private set; }
+    public float MaxSpeed { get; set; }
     public string Status => owner.stateMachine.Status.ToString();
 
     public bool IsHungry => Hunger <= 50;
@@ -52,8 +52,8 @@ public class MinionStats : IStats
 
             if(Age > 70)
             {
-                var diff = Age - 75;
-                var percentage = 3 * diff;
+                var diff = Age - 70;
+                var percentage = 4 * diff;
 
                 if (UnityEngine.Random.Range(0, 100) < percentage)
                     owner.Die(false);

@@ -12,6 +12,16 @@ public class JobQueue : MonoBehaviour
 
     public bool JobsAvailable => jobs.Count > 0;
 
+    public bool ConstructionJobsAvailable()
+    {
+        foreach (var job in jobs)
+        {
+            if (job.GetType() == typeof(ConstructionCollectJob) || job.GetType() == typeof(ConstructionDeliverJob))
+                return true;
+        }
+        return false;
+    }
+
     public void Enqueue(Job job)
     {
         Debug.Log("Enqueue " + job.GetType());

@@ -6,6 +6,8 @@ public class MinionCorpse : MonoBehaviour, ICollectable
 {
     public Transform Transform => transform;
     private bool isBeingCollected = false;
+    private float decayTimer = 10;
+
     public bool IsActive
     {
         get
@@ -16,6 +18,13 @@ public class MinionCorpse : MonoBehaviour, ICollectable
         {
             GetComponent<PolygonCollider2D>().enabled = value;
         }
+    }
+
+    private void Update()
+    {
+        decayTimer -= Time.deltaTime;
+        if (decayTimer <= 0 && isBeingCollected == false)
+            Destroy(gameObject);
     }
 
     public void Collect()

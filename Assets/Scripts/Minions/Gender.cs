@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 public enum Gender
 {
     Male,
-    Female
+    Female,
+    Random
 }
 

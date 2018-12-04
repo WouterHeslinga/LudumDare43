@@ -8,9 +8,7 @@ public class WareHouse : Building
     public override int BoneCost { get; set; } = 10;
     public override int MeatCost { get; set; } = 10;
     public int ResourceSpace;
-    private int resourceInside;
     public override string TooltipText => $"Bones: {BoneCost}\nMeat: {MeatCost}\nStores resources";
-    public bool HasSpace => resourceInside < ResourceSpace;
 
     public List<Transform> wareHouseSpots;
 
@@ -76,6 +74,7 @@ public class WareHouse : Building
             {
                 var spot = GetRandomSpace();
                 var resource = ResourceFactory.CreateResource(item.Key, spot).GetComponent<Resource>();
+                resource.IsActive = false;
                 DeliverResource(spot, resource);
             }
         }

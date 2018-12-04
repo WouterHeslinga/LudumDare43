@@ -45,6 +45,7 @@ public class Job
     {
         JobQueue.Enqueue(this);
         Owner.CurrentJob = null;
+        Owner.Collectable = null;
     }
 }
 

@@ -8,5 +8,9 @@ public class Altar : Building
     public override int MeatCost { get; set; } = 25;
     public override string TooltipText => $"Bones: {BoneCost}\nMeat: {MeatCost}\nMake minions worship you and win the game!";
 
-    public Transform prayingSpot;
+    protected override void Start()
+    {
+        base.Start();
+        GameManager.Instance.KeepPlaying("You Won!");
+    }
 }

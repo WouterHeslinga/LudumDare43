@@ -12,6 +12,7 @@ public class InsaneState : IMinionState
         this.Owner = owner;
 
         Owner.GetComponent<SpriteRenderer>().color = Color.red;
+        Owner.stats.MaxSpeed *= 2;
 
         GetNewTarget();
     }

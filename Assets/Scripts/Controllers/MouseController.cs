@@ -32,8 +32,12 @@ public class MouseController : MonoBehaviour
                 //Check if we clicked a collectable
                 else if(hit.transform?.GetComponent<ICollectable>() != null)
                 {
-                    var collectable = hit.transform.GetComponent<ICollectable>();
-                    collectable.Collect();
+                    var collectables = Physics2D.BoxCastAll(hit.transform.position, new Vector2(0.5f, 0.5f), 0, Vector2.zero);
+                    foreach (var x in collectables)
+                    {
+                        if(x.transform.GetComponent<ICollectable>() != null)
+                            x.transform.GetComponent<ICollectable>().Collect();
+                    }
                 }
                 //We didnt hit a minion
                 else
@@ -49,6 +53,7 @@ public class MouseController : MonoBehaviour
                 {
                     var entity = hit.transform.GetComponent<Minion>();
                     var nearbyEntities = Physics2D.BoxCastAll(entity.transform.position, new Vector2(2.5f, 2.5f), 0, Vector2.zero);
+                    handOfGod.Sacrifice(entity);
                     foreach (var item in nearbyEntities)
                     {
                         if (item.transform.GetComponent<Minion>() != null)
@@ -56,8 +61,6 @@ public class MouseController : MonoBehaviour
                             item.transform.GetComponent<Minion>().stats.Sanity -= 50;
                         }
                     }
-
-                    handOfGod.Sacrifice(entity);
                 }
             }
         }

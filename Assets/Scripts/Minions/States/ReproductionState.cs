@@ -10,6 +10,7 @@ public class ReproductionState : IMinionState
     private List<Minion> validPartners;
     private Minion chosenPartner;
     private float reproductionDuration = 5;
+    private MinionManager minionManager;
 
     public ReproductionState(Minion partner = null)
     {
@@ -19,10 +20,11 @@ public class ReproductionState : IMinionState
     public void Enter(Minion owner)
     {
         this.Owner = owner;
+        minionManager = MinionManager.Instance;
 
-        if(chosenPartner == null)
+        if (chosenPartner == null)
         {
-            validPartners = MinionManager.Instance.FindAvailabePartners(Owner);
+            validPartners = minionManager.FindAvailabePartners(Owner);
 
             //There aren't any valid partners add a cooldown to reproduction so we dont stay in an infinite loop to look for partners
             if (validPartners.Count == 0)
@@ -47,11 +49,11 @@ public class ReproductionState : IMinionState
     public void Update()
     {
         //Something happenend with our partner?
-        if (chosenPartner == null || !MinionManager.Instance.HaveMinionSpace)
+        if (chosenPartner == null || !minionManager.HaveMinionSpace || Owner == null)
+        {
             Owner.CheckForNewJob();
-
-        if (Owner == null && chosenPartner != null)
-            chosenPartner.CheckForNewJob();            
+            chosenPartner.CheckForNewJob();
+        }           
 
         if (Vector2.Distance(Owner.transform.position, chosenPartner.transform.position) > .5f)
             MoveTowardsDestination();
@@ -80,7 +82,7 @@ public class ReproductionState : IMinionState
         reproductionDuration -= Time.deltaTime;
         if(reproductionDuration <= 0)
         {
-            MinionManager.Instance.CreateNewMinion(0, Owner.transform.position);
+            minionManager.CreateNewMinion(0, Owner.transform.position);
             Owner.stats.ReproduceTimer = Random.Range(25, 50);
             Owner.CheckForNewJob();
         }

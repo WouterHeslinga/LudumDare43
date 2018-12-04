@@ -18,6 +18,7 @@ public class WareHouseDeliverJob : Job
 
     public override void CancelJob()
     {
+        Owner.Collectable = null;
         JobQueue.Enqueue(new CollectJob(collectable, collectable.Transform.position));
     }
 }

@@ -69,29 +69,13 @@ public class Minion : MonoBehaviour, IHasInfoPanel
 
     public void Die(bool spawnCorpse)
     {
-        StartCoroutine(FadeTo(0, 1, spawnCorpse));
-    }
+        if (spawnCorpse)
+            Instantiate(corpsePrefab, transform.position, transform.rotation);
 
-    IEnumerator FadeTo(float aValue, float aTime, bool spawnCorpse)
-    {
-        float alpha = transform.GetComponent<SpriteRenderer>().material.color.a;
-        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / aTime)
-        {
-            Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
-            transform.GetComponent<SpriteRenderer>().material.color = newColor;
-            yield return null;
+        MinionManager.Instance.RemoveMinion(this);
 
-            if(newColor.a <= 0.1f)
-            {
-                if (spawnCorpse)
-                    Instantiate(corpsePrefab, transform.position, transform.rotation);
+        CurrentJob?.CancelJob();
 
-                MinionManager.Instance.RemoveMinion(this);
-
-                CurrentJob?.CancelJob();
-
-                Destroy(gameObject);
-            }
-        }
+        Destroy(gameObject);
     }
 }

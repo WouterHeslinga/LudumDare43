@@ -20,15 +20,20 @@ public class IdleState : IMinionState
             Owner.Animator.SetBool("IsButchering", false);
         }
 
+        if (Owner.stats.GetNeeds() != null)
+            Owner.CheckForNewJob();
+
         if (destination == Vector2.zero)
-            destination = Random.insideUnitCircle * 10;
+        {
+            var furthestBuilding = BuildingManager.Instance.furthestBuidling(Owner);
+            destination = Random.insideUnitCircle * furthestBuilding;
+        }
 
         //Are we in range to do work?
         if (Vector2.Distance(destination, Owner.transform.position) > 0.5)
             MoveTowardsDestination();
         else
         {
-            destination = Vector2.zero;
             Owner.CheckForNewJob();
         }
     }

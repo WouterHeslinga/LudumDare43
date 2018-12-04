@@ -27,8 +27,7 @@ public class BuildingManager : MonoBehaviour
             if (building.GetType() != typeof(WareHouse))
                 continue;
 
-            if (((WareHouse)building).HasSpace)
-                return building as WareHouse;
+            return building as WareHouse;
         }
 
         return null;
@@ -36,14 +35,28 @@ public class BuildingManager : MonoBehaviour
 
     public Butchery GetButchery()
     {
+        List<Butchery> butcheries = new List<Butchery>();
         foreach (Building building in allBuildings)
         {
             if (building.GetType() != typeof(Butchery))
                 continue;
-
-            return building as Butchery;
+            butcheries.Add(building as Butchery);
         }
 
-        return null;
+        if (butcheries.Count > 0)
+            return butcheries[Random.Range(0, butcheries.Count)];
+        else
+            return null;
+    }
+
+    public float furthestBuidling(Minion minion)
+    {
+        float distance = 0;
+        foreach (var item in allBuildings)
+        {
+            if (distance < Vector2.Distance(item.transform.position, minion.transform.position))
+                distance = Vector2.Distance(item.transform.position, minion.transform.position);
+        }
+        return distance;
     }
 }

@@ -33,10 +33,4 @@ public class ConstructionCollectJob : Job
 
         Owner.CurrentJob = newJob;
     }
-
-    public override void CancelJob()
-    {
-        //BuildingManager.Instance.GetWareHouse().DeliverResource(BuildingManager.Instance.GetWareHouse().GetRandomSpace(), (Resource)collectable);
-        base.CancelJob();
-    }
 }
